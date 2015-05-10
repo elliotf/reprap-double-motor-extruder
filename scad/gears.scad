@@ -42,25 +42,56 @@ gear_pitch = fit_spur_gears(large_tooth_num, small_tooth_num, gear_dist);
 small_tooth_height = 7;
 small_gear_height  = 15;
 
-large_gear_thickness = small_tooth_height+ext_shaft_nut_height/2;
+large_gear_thickness     = small_tooth_height + 1;
+large_gear_hub_thickness = large_gear_thickness + ext_shaft_nut_height + 5;
+large_gear_hub_diam      = ext_shaft_nut_diam + 7;
 
 module large_gear() {
   difference() {
-    // Simple Test:
-    gear (circular_pitch=gear_pitch,
-      gear_thickness = large_gear_thickness,
-      rim_thickness = large_gear_thickness,
-      rim_width = 3,
-      //hub_thickness = 17,
-      hub_thickness = 0, //large_gear_thickness-0.5+ext_shaft_nut_height,
-      hub_diameter = ext_shaft_nut_diam + 7,
-      number_of_teeth = large_tooth_num,
-      circles=4,
-      bore_diameter = 0);
-    cylinder(r=ext_shaft_diam/2,$fn=36,h=50,center=true);
-    translate([0,0,large_gear_thickness-ext_shaft_nut_height/2]) {
-      //cylinder(r=da6*ext_shaft_nut_diam,h=ext_shaft_nut_height*2,center=true,$fn=6); // nut trap for m6 nut
+    union() {
+      gear (circular_pitch=gear_pitch,
+        gear_thickness  = large_gear_thickness,
+        rim_thickness   = large_gear_thickness,
+        rim_width       = 3,
+        hub_thickness   = large_gear_thickness,
+        hub_diameter    = large_gear_hub_diam,
+        number_of_teeth = large_tooth_num,
+        circles         = 4,
+        bore_diameter   = 0
+      );
+      translate([0,0,large_gear_hub_thickness/2]) {
+        hole(large_gear_hub_diam,large_gear_hub_thickness,32);
+      }
+
+      for(r=[0,1,2,3]) {
+        rotate([0,0,r*90+45]) {
+          hull() {
+            intersection() {
+              translate([0,0,large_gear_hub_thickness/2]) {
+                hole(large_gear_hub_diam,large_gear_hub_thickness,32);
+              }
+              translate([0,0,large_gear_hub_thickness/2]) {
+                cube([large_gear_hub_diam,6,large_gear_hub_thickness],center=true);
+              }
+            }
+
+            translate([large_gear_hub_diam*1.1,0,large_gear_thickness/2]) {
+              hole(6,large_gear_thickness);
+            }
+          }
+        }
+      }
+    }
+    hole(ext_shaft_diam,50,16);
+    translate([0,0,large_gear_hub_thickness]) {
       hole(ext_shaft_nut_diam,ext_shaft_nut_height*2,6); // nut trap for m6 nut
+    }
+    for(r=[0,1,2,3]) {
+      rotate([0,0,r*90+45]) {
+        translate([ext_shaft_diam/2 + 3.5,0,0]) {
+          hole(1,(large_gear_hub_thickness-ext_shaft_nut_height-1)*2,6);
+        }
+      }
     }
   }
 }
