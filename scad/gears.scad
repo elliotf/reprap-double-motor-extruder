@@ -82,7 +82,7 @@ module small_gear() {
 
     // flatted motor hole
     difference() {
-      cylinder(r=5.3/2,$fn=18,h=90,center=true);
+      hole(5.2,40,16);
       //% rotate([0,0,22.5]) cylinder(r=4.5*da8,$fn=8,h=90,center=true);
       //% rotate([0,0,22.5]) cylinder(r=5*da8,$fn=8,h=90,center=true);
       translate([2.65,0,0]) cube([1,10,100],center=true);
@@ -113,5 +113,5 @@ module plate() {
   }
 }
 
-//plate();
-assembly();
+plate();
+//assembly();
