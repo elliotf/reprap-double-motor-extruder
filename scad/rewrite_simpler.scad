@@ -8,16 +8,19 @@ module motor() {
     cube([motor_side,motor_side,motor_len],center=true);
 
     // shaft
-    translate([0,0,motor_len/2+motor_shaft_len/2+motor_shoulder_height])
+    translate([0,0,motor_len/2+motor_shaft_len/2+motor_shoulder_height]) {
       cylinder(r=5/2,h=motor_shaft_len,center=true);
+    }
 
     // shoulder
-    translate([0,0,motor_len/2+motor_shoulder_height/2])
+    translate([0,0,motor_len/2+motor_shoulder_height/2]) {
       cylinder(r=motor_shoulder_diam/2,h=motor_shoulder_height,center=true); // shoulder
+    }
 
     // short shaft
-    translate([0,0,-motor_len/2-motor_short_shaft_len/2])
+    translate([0,0,-motor_len/2-motor_short_shaft_len/2]) {
       cylinder(r=5/2,h=motor_short_shaft_len,center=true);
+    }
   }
 }
 
@@ -165,13 +168,6 @@ module extruder_body() {
       //cube([16,total_depth+1,44],center=true);
     }
   //}
-}
-
-module idler_bearing() {
-  difference() {
-    cylinder(r=idler_bearing_outer/2,h=idler_bearing_height,center=true);
-    cylinder(r=idler_bearing_inner/2,h=idler_bearing_height*2,center=true);
-  }
 }
 
 module idler_bolt_holes() {
@@ -378,7 +374,17 @@ module extruder_body_holes() {
 
   // filament path
   translate([filament_x,filament_y,0]) {
-    hole(filament_hole_diam,50,8);
+    hole(filament_hole_diam,50);
+
+    // funnel filament to bowden tube
+    hull() {
+      translate([0,0,ext_shaft_opening/2]) {
+        hole(filament_diam,5);
+      }
+      translate([0,0,ext_shaft_opening/2-1]) {
+        hole(filament_hole_diam+4,2);
+      }
+    }
 
     // Bowden tubing
     translate([0,0,-main_body_hotend_side_height]) {

@@ -127,7 +127,7 @@ idler_bearing_outer  = bearing_outer;
 idler_bearing_inner  = bearing_inner;
 
 filament_diam = 3;
-filament_hole_diam = filament_diam + 1;
+filament_hole_diam = filament_diam + .5;
 bowden_tubing_diam = 6.5;
 bowden_retainer_inner = 11; // FIXME:  not correct -- it needs to include diameter of retainer with PTFE in it
 bowden_retainer_body_diam = bowden_retainer_inner + 4;
@@ -136,11 +136,12 @@ mount_plate_thickness = 10;
 bottom_thickness = m3_socket_head_diam + min_material_thickness;
 
 ext_shaft_length  = 60;
-hobbed_diam = 8;
+hobbed_diam       = 8;
+hobbed_pulley_len = 8;
 hobbed_width = 7;
 ext_shaft_diam = bearing_inner;
 bearing_opening   = bearing_outer - 1;
-ext_shaft_opening = hobbed_diam + 4;
+ext_shaft_opening = hobbed_diam + 3;
 
 carriage_hole_spacing = 30;
 carriage_hole_small_diam    = m3_diam;
