@@ -62,7 +62,7 @@ idler_thumb_lever_length = 6;
 bowden_retainer_clip_outer = 12;
 
 filament_y   = mount_plate_thickness + filament_diam;
-total_depth  = filament_y + idler_bearing_height * 1.75;
+total_depth  = filament_y + 5 + idler_bearing_height * 2;
 total_height = motor_side + bottom_thickness;
 
 idler_gap_width = 1;

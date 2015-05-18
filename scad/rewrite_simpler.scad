@@ -220,7 +220,7 @@ module idler_holes() {
     }
   }
 
-  module idler_bottom() {
+  module idler_gap_bottom() {
     translate([idler_gap_x,0,main_body_z-main_body_height/2+idler_hinge_height + idler_gap_width/2]) {
       rotate([90,0,0]) {
         hole(idler_gap_width,1,resolution);
@@ -228,7 +228,7 @@ module idler_holes() {
     }
   }
 
-  module idler_middle() {
+  module idler_gap_middle() {
     translate([idler_gap_x,0,ext_shaft_opening/2-idler_gap_width/2]) {
       rotate([90,0,0]) {
         hole(idler_gap_width,1,resolution);
@@ -236,17 +236,17 @@ module idler_holes() {
     }
   }
 
-  module idler_top() {
-    translate([filament_x+bowden_retainer_body_diam/2+idler_gap_width,0,main_body_z+main_body_height/2]) {
-      cube([idler_gap_width*2,1,0.05],center=true);
+  module idler_gap_top() {
+    translate([filament_x+bowden_retainer_body_diam/2+idler_gap_width*2,0,main_body_z+main_body_height/2]) {
+      cube([idler_gap_width*4,1,0.05],center=true);
     }
   }
 
   translate([0,total_depth/2,0]) {
     scale([1,total_depth+1,1]) {
       hull() {
-        idler_bottom();
-        idler_middle();
+        idler_gap_bottom();
+        idler_gap_middle();
       }
     }
   }
@@ -254,18 +254,22 @@ module idler_holes() {
   translate([0,total_depth/2+extrusion_height,0]) {
     scale([1,total_depth,1]) {
       hull() {
-        idler_middle();
-        idler_top();
+        translate([idler_gap_x+idler_gap_width/2,0,ext_shaft_opening/2-idler_gap_width/2]) {
+          rotate([90,0,0]) {
+            //hole(idler_gap_width*2,1,resolution);
+          }
+        }
+        idler_gap_middle();
+        idler_gap_top();
       }
     }
   }
 
-
   translate([0,total_depth,0]) {
     scale([1,total_depth,1]) {
       hull() {
-        idler_middle();
-        idler_top();
+        idler_gap_middle();
+        idler_gap_top();
 
         translate([main_body_width,0,main_body_z+main_body_height/2]) {
           cube([1,1,main_body_height],center=true);
@@ -374,15 +378,15 @@ module extruder_body_holes() {
 
   // filament path
   translate([filament_x,filament_y,0]) {
-    hole(filament_hole_diam,50);
+    hole(filament_hole_diam,50,8);
 
     // funnel filament to bowden tube
     hull() {
       translate([0,0,ext_shaft_opening/2]) {
-        hole(filament_diam,5);
+        hole(filament_diam,6,8);
       }
       translate([0,0,ext_shaft_opening/2-1]) {
-        hole(filament_hole_diam+4,2);
+        hole(filament_hole_diam+4,2,8);
       }
     }
 
@@ -447,18 +451,18 @@ module extruder_body_holes() {
   }
 
   // carriage-side filament support bearing
-  translate([0,filament_y+filament_diam/2+bearing_height*2+bearing_bevel_height/2,0]) {
+  translate([0,total_depth,0]) {
     rotate([90,0,0]) {
-      hole(bearing_outer,bearing_height*3);
+      hole(bearing_outer,bearing_height);
     }
 
     // bearing bevel
     hull() {
       rotate([90,0,0]) {
-        hole(bearing_opening,bearing_height*3);
+        hole(bearing_opening,bearing_height);
       }
       rotate([90,0,0]) {
-        hole(ext_shaft_opening,bearing_height*3+bearing_bevel_height + 1);
+        hole(ext_shaft_opening,bearing_height+bearing_bevel_height + 1);
       }
     }
   }
